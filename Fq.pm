@@ -63,17 +63,21 @@ Wait up to $us seconds (microsecond resolution) waiting for messages to drain
 to 0.  Returns then number of messages drained.  If no messages are backlogged,
 this method does not wait.
 
-=item Logger::Fq::enable_drain_on_exit($s)
+=item Logger::Fq::enable_drain_on_exit($s, $verbose)
 
 This will cause Logger::Fq to register an END {} function that will wait up to
-$s seconds (microsecond resolution) to drain backlogged messages.
+$s seconds (microsecond resolution) to drain backlogged messages. If $verbose
+is specified, print to STDERR the number of messages drain and the time waited.
 
 =cut
 
-our $should_wait_on_exit;
+our ($should_wait_on_exit, $should_be_verbose_on_exit);
 $should_wait_on_exit = 0;
+$should_be_verbose_on_exit = 0;
+
 sub enable_drain_on_exit {
-  $should_wait_on_exit = shift 
+  $should_wait_on_exit = shift;
+  $should_be_verbose_on_exit = shift;
 }
 
 use Time::HiRes qw/gettimeofday tv_interval/;
@@ -82,7 +86,8 @@ END {
     my $start = [gettimeofday];
     my $drained = Logger::Fq::drain(int($should_wait_on_exit) * 1000000);
     my $elapsed = tv_interval ( $start, [gettimeofday] );
-    print STDERR "Drained $drained messages in $elapsed s.\n";
+    print STDERR "Drained $drained messages in $elapsed s.\n"
+      if ($should_be_verbose_on_exit);
   }
 }
 1;

@@ -39,6 +39,7 @@ Logger::Fq
 logger_fq_new(clazz, ...)
   char *clazz
   PREINIT:
+		int i;
     HV *options;
     char *user = "guest";
     char *password = "guest";
@@ -52,8 +53,6 @@ logger_fq_new(clazz, ...)
     if(GLOBAL_LOGGER_FQS_CNT >= GLOBAL_LOGGER_FQS_MAX) {
       Perl_croak(aTHX_ "Too many Logger::Fq instances...");
     }
-    logger = calloc(1, sizeof(*logger));
-    GLOBAL_LOGGER_FQS[GLOBAL_LOGGER_FQS_CNT++] = logger;
     if(items > 1) {
       if(SvTYPE(SvRV(ST(1))) == SVt_PVHV) {
         options = (HV*)SvRV(ST(1));
@@ -69,20 +68,38 @@ logger_fq_new(clazz, ...)
       }
     }
 
-    logger->user = strdup(user);
-    logger->password = strdup(password);
-    logger->host = strdup(host);
-    logger->exchange = strdup(exchange);
-    logger->port = port;
-    logger->backlog = backlog;
-    logger->heartbeat = (int)(heartbeat * 1000.0);
-    fq_client_init(&logger->client, 0, NULL);
-    fq_client_creds(logger->client, logger->host, logger->port,
-                    logger->user, logger->password);
-    fq_client_heartbeat(logger->client, logger->heartbeat);
-    fq_client_set_backlog(logger->client, logger->backlog, 0);
-    fq_client_set_nonblock(logger->client, 1);
-    RETVAL = logger;
+    logger = NULL;
+    for(i=0;i<GLOBAL_LOGGER_FQS_CNT;i++) {
+      logger = GLOBAL_LOGGER_FQS[i];
+      if(!strcmp(user, logger->user) &&
+         !strcmp(password, logger->password) &&
+         !strcmp(exchange, logger->exchange) &&
+         port == logger->port) {
+        RETVAL = logger;
+        break;
+      }
+      logger = NULL;
+    }
+
+    if(!logger) {
+      logger = calloc(1, sizeof(*logger));
+      GLOBAL_LOGGER_FQS[GLOBAL_LOGGER_FQS_CNT++] = logger;
+
+      logger->user = strdup(user);
+      logger->password = strdup(password);
+      logger->host = strdup(host);
+      logger->exchange = strdup(exchange);
+      logger->port = port;
+      logger->backlog = backlog;
+      logger->heartbeat = (int)(heartbeat * 1000.0);
+      fq_client_init(&logger->client, 0, NULL);
+      fq_client_creds(logger->client, logger->host, logger->port,
+                      logger->user, logger->password);
+      fq_client_heartbeat(logger->client, logger->heartbeat);
+      fq_client_set_backlog(logger->client, logger->backlog, 0);
+      fq_client_set_nonblock(logger->client, 1);
+      RETVAL = logger;
+    }
   OUTPUT:
     RETVAL
 
