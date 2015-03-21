@@ -1,4 +1,6 @@
+#ifndef _REENTRANT
 #define _REENTRANT
+#endif
 
 #include "EXTERN.h"
 #include "perl.h"
