@@ -162,7 +162,7 @@ logger_fq_drain(timeout_ms)
         msgs += fq_client_data_backlog(GLOBAL_LOGGER_FQS[i]->client);
       if(!initial) initial = msgs;
       if(msgs == 0) break;
-      usleep(MIN(timeout_ms, 10000));
+      usleep((timeout_ms < 10000) ? timeout_ms : 10000);
       timeout_ms -= 10000;
     }
     RETVAL = (initial - msgs);

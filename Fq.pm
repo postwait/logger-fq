@@ -4,7 +4,7 @@ require DynaLoader;
 
 use strict;
 use vars qw($VERSION @ISA);
-$VERSION = "0.2.9";
+$VERSION = "0.2.10";
 @ISA = qw/DynaLoader/;
 
 bootstrap Logger::Fq $VERSION ;
