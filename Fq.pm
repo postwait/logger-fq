@@ -1,5 +1,26 @@
 package Logger::Fq;
 
+# Copyright (c) 2015, Circonus, Inc.
+# All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to
+# deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+# sell copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+# IN THE SOFTWARE.
+
 require DynaLoader;
 
 use strict;
@@ -15,13 +36,13 @@ Logger::Fq - Log asynchronously to an Fq instance.
 
 =head1 SYNOPSIS
 
-	use Logger::Fq;
+  use Logger::Fq;
   Logger::Fq::enable_drain_on_exit(1);
 
-	my $logger = Logger::Fq->new( host => '127.0.0.1', port => 8765,
+  my $logger = Logger::Fq->new( host => '127.0.0.1', port => 8765,
                                 exchange => 'logging );
   $logger->log("protocol.category", "Message");
-	
+
 =head1 DESCRIPTION
 
 C<Logger::Fq> provides an asynchronous method of logging information via Fq.
@@ -41,7 +62,7 @@ Creates a new Logger::Fq object.
        password => $password,   #default 'guest'
        port => $port,           #default 8765
        host => $vhost,          #default '127.0.0.1'
-			 exchange => $exchange,   #default 'logging'
+       exchange => $exchange,   #default 'logging'
        heartbeat => $hearbeat,  #default 1000 (ms)
      )
 
