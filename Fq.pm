@@ -84,7 +84,7 @@ use Time::HiRes qw/gettimeofday tv_interval/;
 END {
   if($should_wait_on_exit) {
     my $start = [gettimeofday];
-    my $drained = Logger::Fq::drain(int($should_wait_on_exit) * 1000000);
+    my $drained = Logger::Fq::drain(int($should_wait_on_exit * 1000000));
     my $elapsed = tv_interval ( $start, [gettimeofday] );
     print STDERR "Drained $drained messages in $elapsed s.\n"
       if ($should_be_verbose_on_exit);
