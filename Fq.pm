@@ -25,7 +25,7 @@ require DynaLoader;
 
 use strict;
 use vars qw($VERSION @ISA);
-$VERSION = "0.2.10";
+$VERSION = "0.2.11";
 @ISA = qw/DynaLoader/;
 
 bootstrap Logger::Fq $VERSION ;
@@ -39,8 +39,8 @@ Logger::Fq - Log asynchronously to an Fq instance.
   use Logger::Fq;
   Logger::Fq::enable_drain_on_exit(1);
 
-  my $logger = Logger::Fq->new( host => '127.0.0.1', port => 8765,
-                                exchange => 'logging );
+  my $logger = Logger::Fq->new({ host => '127.0.0.1', port => 8765,
+                                exchange => 'logging });
   $logger->log("protocol.category", "Message");
 
 =head1 DESCRIPTION
@@ -53,18 +53,18 @@ never block perl (assuming an IP address is used).
 
 =over 4
 
-=item new()
+=item new($options)
 
 Creates a new Logger::Fq object.
 
-     (
+     {
        user => $user,           #default 'guest'
        password => $password,   #default 'guest'
        port => $port,           #default 8765
        host => $vhost,          #default '127.0.0.1'
        exchange => $exchange,   #default 'logging'
        heartbeat => $hearbeat,  #default 1000 (ms)
-     )
+     }
 
 =item log( $channel, $message )
 
@@ -89,6 +89,10 @@ this method does not wait.
 This will cause Logger::Fq to register an END {} function that will wait up to
 $s seconds (microsecond resolution) to drain backlogged messages. If $verbose
 is specified, print to STDERR the number of messages drain and the time waited.
+
+=item Logger::Fq::debug($flags)
+
+Sets the fileno=2 debugging bits for libfq.
 
 =cut
 

@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Logger-Fq
-version:            0.2.10
+version:            0.2.11
 abstract:           Log to Fq (asynchronously)
 author:
     - Theo Schlossnagle <jesus@lethargy.org>

@@ -59,6 +59,12 @@ MODULE = Logger::Fq PACKAGE = Logger::Fq PREFIX = logger_fq_
 REQUIRE:        1.9505
 PROTOTYPES:     DISABLE
 
+void
+logger_fq_debug(flags)
+  int flags
+  CODE:
+    fq_debug_set_bits(flags);
+
 Logger::Fq
 logger_fq_new(clazz, ...)
   char *clazz
@@ -126,6 +132,25 @@ logger_fq_new(clazz, ...)
     }
   OUTPUT:
     RETVAL
+
+int
+logger_fq_DESTROY(logger)
+  Logger::Fq logger
+  PREINIT:
+    int i;
+  CODE:
+    for(i=0;i<GLOBAL_LOGGER_FQS_CNT;i++) {
+fprintf(stderr, "DESTROY( %p ?= %p )\n", logger, GLOBAL_LOGGER_FQS[i]);
+      if(logger == GLOBAL_LOGGER_FQS[i]) {
+        GLOBAL_LOGGER_FQS[i] = NULL;
+        fq_client_destroy(logger->client);
+        if(logger->user) free(logger->user);
+        if(logger->password) free(logger->password);
+        if(logger->host) free(logger->host);
+        if(logger->exchange) free(logger->exchange);
+        break;
+      }
+    }
 
 int
 logger_fq_log(logger, routing_key, body, ...)
