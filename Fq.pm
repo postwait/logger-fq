@@ -72,7 +72,11 @@ C<$channel> is the routing key used for the Fq message.
 
 C<$message> is the message payload (binary is allowed).
 
+=back
+
 =head2 Static Functions
+
+=over 4
 
 =item Logger::Fq::backlog()
 
@@ -93,6 +97,8 @@ is specified, print to STDERR the number of messages drain and the time waited.
 =item Logger::Fq::debug($flags)
 
 Sets the fileno=2 debugging bits for libfq.
+
+=back
 
 =cut
 
