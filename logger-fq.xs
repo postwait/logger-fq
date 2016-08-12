@@ -140,7 +140,6 @@ logger_fq_DESTROY(logger)
     int i;
   CODE:
     for(i=0;i<GLOBAL_LOGGER_FQS_CNT;i++) {
-fprintf(stderr, "DESTROY( %p ?= %p )\n", logger, GLOBAL_LOGGER_FQS[i]);
       if(logger == GLOBAL_LOGGER_FQS[i]) {
         GLOBAL_LOGGER_FQS[i] = NULL;
         fq_client_destroy(logger->client);
